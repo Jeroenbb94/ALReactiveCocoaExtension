@@ -9,7 +9,10 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+The pod includes extensions for `RACSignal` and adds replacements for the `RAC` and `RACObserve` macros we're used to in Objective-C.
+
 ## Requirements
+This pod requires `ReactiveCocoa 4.0.0 and up`
 
 ## Installation
 
@@ -22,7 +25,7 @@ pod "ALReactiveCocoaExtension"
 
 ## Author
 
-Antoine van der Lee, a.vanderlee@triple-it.nl
+Antoine van der Lee, https://twitter.com/twannl
 
 ## License
 

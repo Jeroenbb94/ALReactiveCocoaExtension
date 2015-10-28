@@ -1,0 +1,25 @@
+{
+  "name": "ALReactiveCocoaExtension",
+  "version": "0.1.0",
+  "summary": "A short description of ALReactiveCocoaExtension.",
+  "description": "",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/ALReactiveCocoaExtension",
+  "license": "MIT",
+  "authors": {
+    "Antoine van der Lee": "a.vanderlee@triple-it.nl"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/ALReactiveCocoaExtension.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "requires_arc": true,
+  "source_files": "Pod/Classes/**/*",
+  "dependencies": {
+    "ReactiveCocoa": [
+      "~>4.0.0-alpha-1"
+    ]
+  }
+}

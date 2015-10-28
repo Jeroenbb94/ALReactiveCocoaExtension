@@ -1,0 +1,6 @@
+framework module Pods_ALReactiveCocoaExtension_Tests {
+  umbrella header "Pods-ALReactiveCocoaExtension_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

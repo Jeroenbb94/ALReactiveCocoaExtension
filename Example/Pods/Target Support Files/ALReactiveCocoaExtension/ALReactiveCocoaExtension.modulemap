@@ -1,0 +1,6 @@
+framework module ALReactiveCocoaExtension {
+  umbrella header "ALReactiveCocoaExtension-umbrella.h"
+
+  export *
+  module * { export * }
+}

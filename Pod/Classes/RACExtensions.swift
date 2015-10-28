@@ -95,6 +95,12 @@ public extension RACSignal {
         let delayedSignal = RACSignal.concat(signals)
         return delayedSignal.execute()
     }
+    
+    func ignoreNil() -> RACSignal {
+        return self.filter({ (innerValue) -> Bool in
+            return innerValue != nil
+        })
+    }
 }
 
 public struct RAC  {
@@ -128,4 +134,15 @@ public func ~> (signal: RACSignal, rac: RAC) -> RACDisposable {
 
 public func RACObserve(target: NSObject!, _ keyPath: String) -> RACSignal {
     return target.rac_valuesForKeyPath(keyPath, observer: target)
+}
+
+extension NSNotificationCenter {
+    func rac_addObserversForNames(names:[String]) -> RACSignal {
+        var signals = [RACSignal]()
+        for name in names {
+            signals.append(self.rac_addObserverForName(name, object: nil))
+        }
+        
+        return RACSignal.merge(signals)
+    }
 }

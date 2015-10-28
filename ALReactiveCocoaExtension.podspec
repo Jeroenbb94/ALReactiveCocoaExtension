@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ALReactiveCocoaExtension"
-  s.version          = "1.0.0"
+  s.version          = "1.0.1"
   s.summary          = "Contains replacements for the RAC and RACObserve macros in Swift and adds multiple cast methods."
 
   s.description      = "Contains replacements for the RAC and RACObserve macros in Swift and adds multiple cast methods which you can use to improve your ReactiveCocoa usage."

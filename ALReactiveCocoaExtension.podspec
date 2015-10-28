@@ -25,4 +25,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Pod/Classes/**/*'
 
   s.dependency 'ReactiveCocoa', '~>4.0.0-alpha-1'
+  s.framework  = "Foundation"
+
+
 end

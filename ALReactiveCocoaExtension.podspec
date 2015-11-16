@@ -19,12 +19,13 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/AvdLee/ALReactiveCocoaExtension.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/twannl'
 
-  s.platform     = :ios, '8.0'
+  s.ios.deployment_target = '8.0'
+  s.tvos.deployment_target = '9.0'
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*'
 
-  s.dependency 'ReactiveCocoa', '~>4.0.0-alpha-1'
+  s.dependency 'ReactiveCocoa', '~>4.0.3-alpha-3'
   s.framework  = "Foundation"
 
 

@@ -1,6 +1,6 @@
 {
   "name": "ALReactiveCocoaExtension",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "summary": "Contains replacements for the RAC and RACObserve macros in Swift and adds multiple cast methods.",
   "description": "Contains replacements for the RAC and RACObserve macros in Swift and adds multiple cast methods which you can use to improve your ReactiveCocoa usage.",
   "homepage": "https://github.com/AvdLee/ALReactiveCocoaExtension",
@@ -10,7 +10,7 @@
   },
   "source": {
     "git": "https://github.com/AvdLee/ALReactiveCocoaExtension.git",
-    "tag": "1.0.0"
+    "tag": "1.0.1"
   },
   "social_media_url": "https://twitter.com/twannl",
   "platforms": {
@@ -20,7 +20,7 @@
   "source_files": "Pod/Classes/**/*",
   "dependencies": {
     "ReactiveCocoa": [
-      "~>4.0.0-alpha-1"
+      "4.0.0-RC.1"
     ]
   },
   "frameworks": "Foundation"

@@ -1,0 +1,29 @@
+PODS:
+  - ALReactiveCocoaExtension (2.0.0):
+    - ReactiveCocoa (= 4.0.0-RC.1)
+  - ReactiveCocoa (4.0.0-RC.1):
+    - ReactiveCocoa/UI (= 4.0.0-RC.1)
+    - Result (~> 1.0)
+  - ReactiveCocoa/Core (4.0.0-RC.1):
+    - ReactiveCocoa/no-arc
+    - Result (~> 1.0)
+  - ReactiveCocoa/no-arc (4.0.0-RC.1):
+    - Result (~> 1.0)
+  - ReactiveCocoa/UI (4.0.0-RC.1):
+    - ReactiveCocoa/Core
+    - Result (~> 1.0)
+  - Result (1.0.1)
+
+DEPENDENCIES:
+  - ALReactiveCocoaExtension (from `../`)
+
+EXTERNAL SOURCES:
+  ALReactiveCocoaExtension:
+    :path: ../
+
+SPEC CHECKSUMS:
+  ALReactiveCocoaExtension: a1d4e06ec30d94d71e220ee50da1bc343d8b9e75
+  ReactiveCocoa: 2b0f654beb7642b82cfd3fdb845205ae9889422c
+  Result: caef80340451e1f07492fa1e89117f83613bce24
+
+COCOAPODS: 0.39.0

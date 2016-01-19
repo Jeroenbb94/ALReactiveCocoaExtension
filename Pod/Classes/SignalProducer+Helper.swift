@@ -43,6 +43,10 @@ public extension SignalProducerType {
         return self.on(completed: nextClosure)
     }
     
+    func subscribeNext(nextClosure:(object:Value) -> ()) -> Disposable {
+        return self.startWithNext(nextClosure)
+    }
+    
     func subscribeNextAs<U>(nextClosure:(U) -> ()) -> Disposable {
         return self.startWithNext({ (object) -> () in
             self.errorLogCastNext(object, withClosure: nextClosure)

@@ -35,6 +35,11 @@ producer.doNextAs { (string:String) -> () in
 producer.subscribeNextAs { (string:String) -> () in
     print(string)
 }
+
+// Prints "testValue"
+producer.subscribeNext { (string) -> () in
+print(string)
+}
     
 // Prints "completed"
 producer.subscribeCompleted { () -> () in

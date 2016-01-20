@@ -9,6 +9,18 @@
 import Foundation
 import ReactiveCocoa
 
+public extension SignalProducerType where Error == NSError {
+    func mapTo<U>() -> SignalProducer<U, NSError> {
+        return flatMap(FlattenStrategy.Latest, transform: { (object) -> SignalProducer<U, NSError> in
+            if let castedObject = object as? U {
+                return SignalProducer(value: castedObject)
+            } else {
+                return SignalProducer(error: NSError(domain: "ALReactiveCocoaExtension", code: 500, userInfo: nil))
+            }
+        })
+    }
+}
+
 public extension SignalProducerType {
     
     private func errorLogCastNext<U>(next:Value?, withClosure nextClosure:(U) -> ()){

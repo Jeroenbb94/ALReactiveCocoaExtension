@@ -10,26 +10,30 @@ import Foundation
 import ReactiveCocoa
 
 public extension SignalProducerType where Error == NSError {
-    func mapTo<U>() -> SignalProducer<U, NSError> {
+    func mapTo<U>(type:U) -> SignalProducer<U, NSError> {
         return flatMap(FlattenStrategy.Latest, transform: { (object) -> SignalProducer<U, NSError> in
             if let castedObject = object as? U {
                 return SignalProducer(value: castedObject)
             } else {
+                print("ERROR: Could not cast! \(object)")
+                return SignalProducer(error: NSError(domain: "ALReactiveCocoaExtension", code: 500, userInfo: nil))
+            }
+        })
+    }
+    
+    func mapToType<U>() -> SignalProducer<U, NSError> {
+        return flatMap(FlattenStrategy.Latest, transform: { (object) -> SignalProducer<U, NSError> in
+            if let castedObject = object as? U {
+                return SignalProducer(value: castedObject)
+            } else {
+                print("ERROR: Could not cast! \(object)")
                 return SignalProducer(error: NSError(domain: "ALReactiveCocoaExtension", code: 500, userInfo: nil))
             }
         })
     }
 }
 
-public extension SignalProducerType {
-    
-    private func errorLogCastNext<U>(next:Value?, withClosure nextClosure:(U) -> ()){
-        if let nextAsT = next as? U {
-            nextClosure(nextAsT)
-        } else {
-            print("ERROR: Could not cast! \(next)")
-        }
-    }
+public extension SignalProducerType where Error == NSError {
     
     func initially(callback:() -> ()) -> SignalProducer<Value, Error> {
         return self.on(started: callback)
@@ -45,10 +49,8 @@ public extension SignalProducerType {
         return self.on(next: nextClosure)
     }
     
-    func doNextAs<U>(nextClosure:(U) -> ()) -> SignalProducer<Value, Error> {
-        return self.on(next: { (object) -> () in
-            self.errorLogCastNext(object, withClosure: nextClosure)
-        })
+    func doNextAs<U>(nextClosure:(U) -> ()) -> SignalProducer<U, Error> {
+        return self.mapToType().on(next: nextClosure)
     }
     
     func doCompleted(nextClosure:() -> ()) -> SignalProducer<Value, Error> {
@@ -60,9 +62,7 @@ public extension SignalProducerType {
     }
     
     func subscribeNextAs<U>(nextClosure:(U) -> ()) -> Disposable {
-        return self.startWithNext({ (object) -> () in
-            self.errorLogCastNext(object, withClosure: nextClosure)
-        })
+        return self.mapToType().startWithNext(nextClosure)
     }
     
     func subscribeCompleted(completed: () -> ()) -> Disposable {

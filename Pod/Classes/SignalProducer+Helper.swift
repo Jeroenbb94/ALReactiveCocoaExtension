@@ -9,31 +9,51 @@
 import Foundation
 import ReactiveCocoa
 
-public extension SignalProducerType where Error == NSError {
-    func mapTo<U>(type:U) -> SignalProducer<U, NSError> {
-        return flatMap(FlattenStrategy.Latest, transform: { (object) -> SignalProducer<U, NSError> in
+public protocol ErrorTypeConvertible: ErrorType {
+    typealias ConvertibleType = Self
+    static func errorFromErrorType(error: ErrorType) -> ConvertibleType
+}
+
+/// Make NSError conform to ErrorTypeConvertible
+extension NSError: ErrorTypeConvertible {
+    public static func errorFromErrorType(error: ErrorType) -> NSError {
+        return error as NSError
+    }
+}
+
+extension NoError: ErrorTypeConvertible {
+    public static func errorFromErrorType(error: ErrorType) -> NSError {
+        return error as NSError
+    }
+}
+
+public extension SignalProducerType where Error: ErrorTypeConvertible  {
+    func mapTo<U>(type:U) -> SignalProducer<U, Error> {
+        return flatMap(FlattenStrategy.Latest, transform: { (object) -> SignalProducer<U, Error> in
             if let castedObject = object as? U {
                 return SignalProducer(value: castedObject)
             } else {
                 print("ERROR: Could not cast! \(object)")
-                return SignalProducer(error: NSError(domain: "ALReactiveCocoaExtension", code: 500, userInfo: nil))
+                let convertedError = Error.errorFromErrorType(NSError(domain: "ALReactiveCocoaExtension", code: 500, userInfo: nil)) as! Error
+                return SignalProducer(error: convertedError)
             }
         })
     }
     
-    func mapToType<U>() -> SignalProducer<U, NSError> {
-        return flatMap(FlattenStrategy.Latest, transform: { (object) -> SignalProducer<U, NSError> in
+    func mapToType<U>() -> SignalProducer<U, Error> {
+        return flatMap(FlattenStrategy.Latest, transform: { (object) -> SignalProducer<U, Error> in
             if let castedObject = object as? U {
                 return SignalProducer(value: castedObject)
             } else {
                 print("ERROR: Could not cast! \(object)")
-                return SignalProducer(error: NSError(domain: "ALReactiveCocoaExtension", code: 500, userInfo: nil))
+                let convertedError = Error.errorFromErrorType(NSError(domain: "ALReactiveCocoaExtension", code: 500, userInfo: nil)) as! Error
+                return SignalProducer(error: convertedError)
             }
         })
     }
 }
 
-public extension SignalProducerType where Error == NSError {
+public extension SignalProducerType where Error : ErrorTypeConvertible {
     
     func initially(callback:() -> ()) -> SignalProducer<Value, Error> {
         return self.on(started: callback)

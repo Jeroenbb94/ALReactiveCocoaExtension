@@ -17,38 +17,28 @@ This pod includes an extension for the new `SignalProducer`. This brings the met
 let producer = SignalProducer<String, NSError>(value: "testValue")
     
 // Prints "producer started!"
-producer.initially { () -> () in
+producer.onStarted { () -> () in
     print("producer started!")
 }.start()
     
 // Prints "testValue"
-producer.doNext { (object) -> () in
+producer.onNext { (object) -> () in
     print(object)
 }.start()
     
-// Prints "testValue"
-producer.doNextAs { (string:String) -> () in
+// Prints "testValue", can be used to cast AnyObjects for example
+producer.onNextAs { (string:String) -> () in
     print(string)
 }.start()
     
-// Prints "testValue"
-producer.subscribeNextAs { (string:String) -> () in
+// Prints "testValue", can be used to cast AnyObjects for example
+producer.startWithNextAs { (string:String) -> () in
     print(string)
-}
-
-// Prints "testValue"
-producer.subscribeNext { (string) -> () in
-print(string)
-}
-    
-// Prints "completed"
-producer.subscribeCompleted { () -> () in
-    print("completed")
 }
     
 // Prints "Error Domain=sample.domain Code=-1 "(null)""
 let errorProducer = SignalProducer<String, NSError>(error:NSError(domain: "sample.domain", code: -1, userInfo: nil))
-errorProducer.doError { (error) -> () in
+errorProducer.onError { (error) -> () in
     print(error)
 }.start()
 ```

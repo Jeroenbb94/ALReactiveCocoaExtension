@@ -24,10 +24,12 @@ class Tests: XCTestCase {
         RAC(self, "test") <~ RACObserve(self, "test")
         RACObserve(self, "test") ~> RAC(self, "test")
         
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
+        let producer = SignalProducer(value: 50.0).flatMap(.Latest, transform: { (object) -> SignalProducer<Float, NoError> in
+            return SignalProducer(value: object)
+        }).onNext { (object:Float) in
+            
         }
+        producer.start()
     }
     
 }

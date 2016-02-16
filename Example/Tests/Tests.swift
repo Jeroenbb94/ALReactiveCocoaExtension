@@ -5,28 +5,47 @@ import ReactiveCocoa
 
 class Tests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
-    }
-    
-    func testPerformanceExample() {
-        RAC(self, "test") <~ RACObserve(self, "test")
-        RACObserve(self, "test") ~> RAC(self, "test")
+    func testCastingSuccess() {
+        let expectation = expectationWithDescription("This will cast AnyObject to Double")
         
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
+        let producer:SignalProducer<AnyObject, NSError> = SignalProducer(value: 50.0)
+        var errorValue:ErrorType?
+        var doubleValue:Double?
+        
+        producer.onError({ (error) in
+            errorValue = error
+            expectation.fulfill()
+        }).onNextAs { (number:Double) in
+            doubleValue = number
+        }.onCompleted({ 
+            expectation.fulfill()
+        }).start()
+        
+        waitForExpectationsWithTimeout(10.0) { (_) in
+            XCTAssertNil(errorValue)
+            XCTAssertNotNil(doubleValue)
+        }
+    }
+    
+    func testCastingFailure() {
+        let expectation = expectationWithDescription("This will fail to cast AnyObject to String")
+        
+        let producer:SignalProducer<AnyObject, NSError> = SignalProducer(value: 50.0)
+        var errorValue:ErrorType?
+        var stringValue:String?
+        
+        producer.onNextAs { (string:String) in
+            stringValue = string
+        }.onError({ (error) in
+            errorValue = error
+            expectation.fulfill()
+        }).onCompleted({
+            expectation.fulfill()
+        }).start()
+        
+        waitForExpectationsWithTimeout(10.0) { (_) in
+            XCTAssertNotNil(errorValue)
+            XCTAssertNil(stringValue)
         }
     }
     

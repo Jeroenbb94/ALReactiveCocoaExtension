@@ -38,7 +38,7 @@ public extension SignalProducerType {
         })
     }
     
-    func onNext(nextClosure:(object:Value) -> ()) -> SignalProducer<Value, Error> {
+    func onNext(nextClosure:(Value) -> ()) -> SignalProducer<Value, Error> {
         return self.on(next: nextClosure)
     }
     

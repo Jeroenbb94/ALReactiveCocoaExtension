@@ -3,6 +3,10 @@ import XCTest
 import ALReactiveCocoaExtension
 import ReactiveCocoa
 
+enum ALErrorType : ErrorType {
+    case TestError
+}
+
 class Tests: XCTestCase {
     
     func testCastingSuccess() {
@@ -49,4 +53,21 @@ class Tests: XCTestCase {
         }
     }
     
+    func testErrorCast(){
+        
+        let producer:SignalProducer<AnyObject, ALErrorType> = SignalProducer(value: "String")
+        
+        producer.flatMapErrorToNSError().onError { (error) -> () in
+            print(error.userInfo)
+        }
+    }
+    
+}
+
+extension SignalProducerType {
+    func flatMapErrorToNSError() -> SignalProducer<Value, NSError> {
+        return flatMapError { (error) -> SignalProducer<Value, NSError> in
+            return SignalProducer(error: error as NSError)
+        }
+    }
 }

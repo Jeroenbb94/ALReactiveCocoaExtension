@@ -51,7 +51,11 @@ public extension SignalProducerProtocol {
         return self.mapToType().on(value: nextClosure)
     }
     
-//    func startWithNextAs<U>(_ nextClosure:@escaping (U) -> ()) -> Disposable {
-//        return self.mapToType()
-//    }
+    /// This function ignores any parsing errors
+    func startWithNextAs<U>(_ nextClosure:@escaping (U) -> ()) -> Disposable {
+        return mapToType()
+            .flatMapError { (object) -> SignalProducer<U, NoError> in
+                return SignalProducer.empty
+            }.startWithValues(nextClosure)
+    }
 }

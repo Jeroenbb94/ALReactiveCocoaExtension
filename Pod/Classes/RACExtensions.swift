@@ -29,10 +29,12 @@ associativity right
 precedence 93
 }
 
+@discardableResult
 public func <~ (rac: RAC, signal: RACSignal) -> RACDisposable {
     return signal ~> rac
 }
 
+@discardableResult
 public func ~> (signal: RACSignal, rac: RAC) -> RACDisposable {
     return rac.assignSignal(signal)
 }

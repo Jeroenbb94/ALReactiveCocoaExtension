@@ -19,8 +19,8 @@ public struct RAC  {
         self.nilValue = nilValue
     }
     
-    func assignSignal(signal : RACSignal) -> RACDisposable {
-        return signal.setKeyPath(self.keyPath, onObject: self.target, nilValue: self.nilValue)
+    func assignSignal(_ signal : RACSignal) -> RACDisposable {
+        return signal.setKeyPath(self.keyPath, on: self.target, nilValue: self.nilValue)
     }
 }
 
@@ -37,6 +37,6 @@ public func ~> (signal: RACSignal, rac: RAC) -> RACDisposable {
     return rac.assignSignal(signal)
 }
 
-public func RACObserve(target: NSObject!, _ keyPath: String) -> RACSignal {
-    return target.rac_valuesForKeyPath(keyPath, observer: target)
+public func RACObserve(_ target: NSObject!, _ keyPath: String) -> RACSignal {
+    return target.rac_values(forKeyPath: keyPath, observer: target)
 }

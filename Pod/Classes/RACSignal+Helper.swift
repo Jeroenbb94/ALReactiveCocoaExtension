@@ -11,7 +11,7 @@ import ReactiveCocoa
 
 public extension RACSignal {
     
-    private func errorLogCastNext<T>(next:AnyObject!, withClosure nextClosure:(T) -> ()){
+    fileprivate func errorLogCastNext<T>(_ next:Any!, withClosure nextClosure:(T) -> ()){
         if let nextAsT = next as? T {
             nextClosure(nextAsT)
         } else {
@@ -19,68 +19,68 @@ public extension RACSignal {
         }
     }
     
-    func subscribeNextAs<T>(nextClosure:(T) -> ()) -> RACDisposable {
+    func subscribeNextAs<T>(_ nextClosure:@escaping (T) -> ()) -> RACDisposable {
         return self.subscribeNext {
-            (next: AnyObject!) -> () in
+            (next: Any!) -> () in
             self.errorLogCastNext(next, withClosure: nextClosure)
         }
     }
     
-    func trySubscribeNextAs<T>(nextClosure:(T) -> ()) -> () {
-        self.filter { (next: AnyObject!) -> Bool in
+    func trySubscribeNextAs<T>(_ nextClosure:@escaping (T) -> ()) -> () {
+        self.filter { (next: Any!) -> Bool in
             return next != nil
             }.subscribeNext {
-                (next: AnyObject!) -> () in
+                (next: Any!) -> () in
                 
                 self.errorLogCastNext(next, withClosure: nextClosure)
         }
     }
     
-    func subscribeNextAs<T>(nextClosure:(T) -> (), error: (NSError) -> ()) -> RACDisposable {
-        return self.subscribeNext({ (next: AnyObject!) -> Void in
+    func subscribeNextAs<T>(_ nextClosure:@escaping (T) -> (), error: @escaping (NSError) -> ()) -> RACDisposable {
+        return self.subscribeNext({ (next: Any!) -> Void in
             self.errorLogCastNext(next, withClosure: nextClosure)
-            }, error: { (err: NSError!) -> Void in
-                error(err)
+            }, error: { (err: Error?) -> Void in
+                error(err as! NSError)
         })
     }
     
-    func subscribeNextAs<T>(nextClosure:(T) -> (), error: (NSError) -> (), completed:() ->()) -> () {
+    func subscribeNextAs<T>(_ nextClosure:@escaping (T) -> (), error: @escaping (NSError) -> (), completed:@escaping () ->()) -> () {
         self.subscribeNext({
-            (next: AnyObject!) -> () in
+            (next: Any!) -> () in
             self.errorLogCastNext(next, withClosure: nextClosure)
             }, error: {
-                (err: NSError!) -> () in
-                error(err)
+                (err: Error?) -> () in
+                error(err as! NSError)
             }, completed: completed)
     }
     
-    func flattenMapAs<T: AnyObject>(flattenMapClosure:(T) -> RACStream) -> RACSignal {
+    func flattenMapAs<T: Any>(_ flattenMapClosure:@escaping (T) -> RACStream) -> RACSignal {
         return self.flattenMap {
-            (next: AnyObject!) -> RACStream in
+            (next: Any!) -> RACStream in
             let nextAsT = next as! T
             return flattenMapClosure(nextAsT)
         }
     }
     
-    func mapAs<T, U: AnyObject>(mapClosure:(T) -> U) -> RACSignal {
+    func mapAs<T, U: Any>(_ mapClosure:@escaping (T) -> U) -> RACSignal {
         return self.map {
-            (next: AnyObject!) -> AnyObject! in
+            (next: Any!) -> Any! in
             let nextAsT = next as! T
             return mapClosure(nextAsT)
         }
     }
     
-    func filterAs<T: AnyObject>(filterClosure:(T) -> Bool) -> RACSignal {
+    func filterAs<T: Any>(_ filterClosure:@escaping (T) -> Bool) -> RACSignal {
         return self.filter {
-            (next: AnyObject!) -> Bool in
+            (next: Any!) -> Bool in
             let nextAsT = next as! T
             return filterClosure(nextAsT)
         }
     }
     
-    func doNextAs<T>(nextClosure:(T) -> ()) -> RACSignal {
+    func doNextAs<T>(_ nextClosure:@escaping (T) -> ()) -> RACSignal {
         return self.doNext {
-            (next: AnyObject!) -> () in
+            (next: Any!) -> () in
             self.errorLogCastNext(next, withClosure: nextClosure)
         }
     }
@@ -91,10 +91,10 @@ public extension RACSignal {
         }
     }
     
-    func executeWithDelay(interval:NSTimeInterval) -> RACDisposable {
+    func executeWithDelay(_ interval:TimeInterval) -> RACDisposable? {
         let signals = [RACSignal.empty().delay(interval), self]
-        let delayedSignal = RACSignal.concat(signals)
-        return delayedSignal.execute()
+        let delayedSignal = RACSignal.concat(signals as NSFastEnumeration!)
+        return delayedSignal?.execute()
     }
     
     func ignoreNil() -> RACSignal {

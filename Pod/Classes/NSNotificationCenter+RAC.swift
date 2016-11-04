@@ -7,15 +7,16 @@
 //
 
 import Foundation
-import ReactiveCocoa
+import ReactiveSwift
+import enum Result.NoError
 
-extension NSNotificationCenter {
-    func rac_addObserversForNames(names:[String]) -> RACSignal {
-        var signals = [RACSignal]()
+extension NotificationCenter {
+    func rac_addObserversForNames(_ names:[String]) -> SignalProducer<Notification, NoError> {
+        var signals = [SignalProducer<Notification, NoError>]()
         for name in names {
-            signals.append(self.rac_addObserverForName(name, object: nil))
+            signals.append(reactive.notifications(forName: Notification.Name(rawValue: name)))
         }
         
-        return RACSignal.merge(signals)
+        return SignalProducer.merge(signals)
     }
 }

@@ -2,18 +2,20 @@ import UIKit
 import XCTest
 import ALReactiveCocoaExtension
 import ReactiveCocoa
+import ReactiveSwift
+import enum Result.NoError
 
-enum ALErrorType : ErrorType {
-    case TestError
+enum ALErrorType : Error {
+    case testError
 }
 
 class Tests: XCTestCase {
     
     func testCastingSuccess() {
-        let expectation = expectationWithDescription("This will cast AnyObject to Double")
-        
-        let producer:SignalProducer<AnyObject, NSError> = SignalProducer(value: 50.0)
-        var errorValue:ErrorType?
+        let expectation = self.expectation(description: "This will cast AnyObject to Double")
+    
+        let producer:SignalProducer<Double, NoError> = SignalProducer(value: 50.0)
+        var errorValue:Error?
         var doubleValue:Double?
         
         producer.onError({ (error) in
@@ -25,17 +27,17 @@ class Tests: XCTestCase {
             expectation.fulfill()
         }).start()
         
-        waitForExpectationsWithTimeout(10.0) { (_) in
+        waitForExpectations(timeout: 10.0) { (_) in
             XCTAssertNil(errorValue)
             XCTAssertNotNil(doubleValue)
         }
     }
     
     func testCastingFailure() {
-        let expectation = expectationWithDescription("This will fail to cast AnyObject to String")
+        let expectation = self.expectation(description: "This will fail to cast AnyObject to String")
         
-        let producer:SignalProducer<AnyObject, NSError> = SignalProducer(value: 50.0)
-        var errorValue:ErrorType?
+        let producer:SignalProducer<Double, NoError> = SignalProducer(value: 50.0)
+        var errorValue:Error?
         var stringValue:String?
         
         producer.onNextAs { (string:String) in
@@ -47,7 +49,7 @@ class Tests: XCTestCase {
             expectation.fulfill()
         }).start()
         
-        waitForExpectationsWithTimeout(10.0) { (_) in
+        waitForExpectations(timeout: 10.0) { (_) in
             XCTAssertNotNil(errorValue)
             XCTAssertNil(stringValue)
         }
@@ -55,16 +57,16 @@ class Tests: XCTestCase {
     
     func testErrorCast(){
         
-        let producer:SignalProducer<AnyObject, ALErrorType> = SignalProducer(value: "String")
+        let producer:SignalProducer<String, NoError> = SignalProducer(value: "String")
         
         producer.flatMapErrorToNSError().onError { (error) -> () in
             print(error.userInfo)
-        }
+        }.start()
     }
     
 }
 
-extension SignalProducerType {
+extension SignalProducerProtocol {
     func flatMapErrorToNSError() -> SignalProducer<Value, NSError> {
         return flatMapError { (error) -> SignalProducer<Value, NSError> in
             return SignalProducer(error: error as NSError)

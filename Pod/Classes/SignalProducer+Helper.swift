@@ -7,100 +7,55 @@
 //
 
 import Foundation
-import ReactiveCocoa
+import ReactiveSwift
+import enum Result.NoError
 
-public enum ALCastError : ErrorType {
-    case CouldNotCastToType
+public enum ALCastError : Error {
+    case couldNotCastToType
 }
 
-private extension SignalProducerType  {
+private extension SignalProducerProtocol  {
     func mapToType<U>() -> SignalProducer<U, ALCastError> {
         return flatMapError({ (_) -> SignalProducer<Value, ALCastError> in
-            return SignalProducer(error: ALCastError.CouldNotCastToType)
-        }).flatMap(.Concat) { object -> SignalProducer<U, ALCastError> in
+            return SignalProducer(error: ALCastError.couldNotCastToType)
+        }).flatMap(.concat) { object -> SignalProducer<U, ALCastError> in
             if let castedObject = object as? U {
                 return SignalProducer(value: castedObject)
             } else {
-                return SignalProducer(error: ALCastError.CouldNotCastToType)
+                return SignalProducer(error: ALCastError.couldNotCastToType)
             }
         }
     }
 }
 
-public extension SignalProducerType {
-    func onStarted(callback:() -> ()) -> SignalProducer<Value, Error> {
+public extension SignalProducerProtocol {
+    func onStarted(_ callback:@escaping () -> ()) -> SignalProducer<Value, Error> {
         return self.on(started: callback)
     }
     
-    func onError(callback:(error:Error) -> () ) -> SignalProducer<Value, Error> {
+    func onError(_ callback:@escaping (_ error:Error) -> () ) -> SignalProducer<Value, Error> {
         return self.on(failed: { (error) -> () in
-            callback(error: error)
+            callback(error)
         })
     }
     
-    func onNext(nextClosure:(Value) -> ()) -> SignalProducer<Value, Error> {
-        return self.on(next: nextClosure)
+    func onNext(_ nextClosure:@escaping (Value) -> ()) -> SignalProducer<Value, Error> {
+        return self.on(value: nextClosure)
     }
     
-    func onCompleted(nextClosure:() -> ()) -> SignalProducer<Value, Error> {
+    func onCompleted(_ nextClosure:@escaping () -> ()) -> SignalProducer<Value, Error> {
         return self.on(completed: nextClosure)
     }
     
-    func onNextAs<U>(nextClosure:(U) -> ()) -> SignalProducer<U, ALCastError> {
-        return self.mapToType().on(next: nextClosure)
+    func onNextAs<U>(_ nextClosure:@escaping (U) -> ()) -> SignalProducer<U, ALCastError> {
+        return self.mapToType().on(value: nextClosure)
     }
     
-    func startWithNextAs<U>(nextClosure:(U) -> ()) -> Disposable {
-        return self.mapToType().startWithNext(nextClosure)
-    }
-}
-
-/// Deprecated methods
-public extension SignalProducerType {
-    @available(*, deprecated, message="This will be removed. Use onStarted instead.")
-    func initially(callback:() -> ()) -> SignalProducer<Value, Error> {
-        return self.on(started: callback)
-    }
-    
-    @available(*, deprecated, message="This will be removed. Use onError instead.")
-    func doError(callback:(error:Error) -> () ) -> SignalProducer<Value, Error> {
-        return self.on(failed: { (error) -> () in
-            callback(error: error)
-        })
-    }
-    
-    @available(*, deprecated, message="This will be removed. Use onNext instead.")
-    func doNext(nextClosure:(object:Value) -> ()) -> SignalProducer<Value, Error> {
-        return self.on(next: nextClosure)
-    }
-    
-    @available(*, deprecated, message="This will be removed. Use onCompleted instead.")
-    func doCompleted(nextClosure:() -> ()) -> SignalProducer<Value, Error> {
-        return self.on(completed: nextClosure)
-    }
-    
-    @available(*, deprecated, message="This will be removed. Use startWithNext instead.")
-    func subscribeNext(nextClosure:(object:Value) -> ()) -> Disposable {
-        return self.startWithNext(nextClosure)
-    }
-    
-    @available(*, deprecated, message="This will be removed. Use start instead.")
-    func execute() -> Disposable {
-        return self.start()
-    }
-    
-    @available(*, deprecated, message="This will be removed. Use startWithCompleted instead.")
-    func subscribeCompleted(completed: () -> ()) -> Disposable {
-        return self.startWithCompleted(completed)
-    }
-    
-    @available(*, deprecated, message="This will be removed. Use onNextAs instead.")
-    func doNextAs<U>(nextClosure:(U) -> ()) -> SignalProducer<U, ALCastError> {
-        return self.mapToType().on(next: nextClosure)
-    }
-    
-    @available(*, deprecated, message="This will be removed. Use startWithNextAs instead.")
-    func subscribeNextAs<U>(nextClosure:(U) -> ()) -> Disposable {
-        return self.mapToType().startWithNext(nextClosure)
+    /// This function ignores any parsing errors
+    func startWithNextAs<U>(_ nextClosure:@escaping (U) -> ()) -> Disposable {
+        return mapToType()
+            .flatMapError { (object) -> SignalProducer<U, NoError> in
+                return SignalProducer.empty
+            }.startWithValues(nextClosure)
     }
 }

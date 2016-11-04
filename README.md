@@ -44,7 +44,9 @@ errorProducer.onError { (error) -> () in
 ```
 
 ## Requirements
-This pod requires `ReactiveCocoa 4.0.0 and up`
+- This pod requires `ReactiveCocoa 4.2.0 and up`
+- Swift 3.0
+- iOS 9+ 
 
 ## Installation
 

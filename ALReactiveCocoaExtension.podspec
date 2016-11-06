@@ -24,8 +24,8 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Pod/Classes/**/*'
 
-  s.dependency 'Moya', '8.0.0-beta.2'
-  s.dependency "ReactiveSwift", "1.0.0-alpha.2"
+  s.dependency 'Moya', '8.0.0-beta.3'
+  s.dependency "ReactiveSwift", "1.0.0-alpha.3"
   s.dependency "ReactiveCocoa"
   s.framework  = "Foundation"
 

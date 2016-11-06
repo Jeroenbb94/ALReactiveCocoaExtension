@@ -57,6 +57,12 @@ it, simply add the following line to your Podfile:
 pod "ALReactiveCocoaExtension"
 ```
 
+#### Swift version vs Pod version
+| Swift version | Pod version    |
+| ------------- | --------------- |
+| 3.X           | >= 4.0.0			|
+| 2.3           | 3.0.3			   |
+
 ## Author
 
 Antoine van der Lee, 

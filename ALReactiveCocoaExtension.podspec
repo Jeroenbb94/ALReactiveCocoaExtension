@@ -26,7 +26,6 @@ Pod::Spec.new do |s|
 
   s.dependency 'Moya', '8.0.0-beta.3'
   s.dependency "ReactiveSwift", "1.0.0-alpha.3"
-  s.dependency "ReactiveCocoa"
   s.framework  = "Foundation"
 
 

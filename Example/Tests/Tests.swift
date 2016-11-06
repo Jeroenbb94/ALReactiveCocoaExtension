@@ -1,7 +1,6 @@
 import UIKit
 import XCTest
 import ALReactiveCocoaExtension
-import ReactiveCocoa
 import ReactiveSwift
 import enum Result.NoError
 

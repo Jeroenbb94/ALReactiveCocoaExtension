@@ -1,22 +1,14 @@
 PODS:
   - Alamofire (4.0.1)
-  - ALReactiveCocoaExtension (3.0.3):
-    - Moya (= 8.0.0-beta.2)
-    - ReactiveCocoa
-    - ReactiveSwift (= 1.0.0-alpha.2)
-  - Moya (8.0.0-beta.2):
-    - Moya/Core (= 8.0.0-beta.2)
-  - Moya/Core (8.0.0-beta.2):
+  - ALReactiveCocoaExtension (4.0.0):
+    - Moya (= 8.0.0-beta.3)
+    - ReactiveSwift (= 1.0.0-alpha.3)
+  - Moya (8.0.0-beta.3):
+    - Moya/Core (= 8.0.0-beta.3)
+  - Moya/Core (8.0.0-beta.3):
     - Alamofire (~> 4.0.0)
     - Result
-  - ReactiveCocoa (2.5):
-    - ReactiveCocoa/UI (= 2.5)
-  - ReactiveCocoa/Core (2.5):
-    - ReactiveCocoa/no-arc
-  - ReactiveCocoa/no-arc (2.5)
-  - ReactiveCocoa/UI (2.5):
-    - ReactiveCocoa/Core
-  - ReactiveSwift (1.0.0-alpha.2):
+  - ReactiveSwift (1.0.0-alpha.3):
     - Result (~> 3.0)
   - Result (3.0.0)
 
@@ -29,12 +21,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
-  ALReactiveCocoaExtension: c07dec0bc2f4cf12d747e7bc5c6cac59f24450b4
-  Moya: 920d40f738e6f4ece84010cec701bb9693be8251
-  ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
-  ReactiveSwift: 967383cc7b58baa05c997965f9a76b7fd796f2a7
+  ALReactiveCocoaExtension: d52921e6cfc3a731043ef12c8fe044a21135632f
+  Moya: f83c7f81eaa28cb0151549dfcf1f3fda4440bb50
+  ReactiveSwift: d67b677f9574ba614d94022a88fcf456e77fa515
   Result: 1b3e431f37cbcd3ad89c6aa9ab0ae55515fae3b6
 
-PODFILE CHECKSUM: 733979e2b285aa01a8a4c853cebeeb13010542a7
+PODFILE CHECKSUM: 6baae5e23a4e718e01b19f2dee01c5b9e65aa639
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.1

@@ -29,30 +29,30 @@ private extension SignalProducerProtocol  {
 }
 
 public extension SignalProducerProtocol {
-    func onStarted(_ callback:@escaping () -> ()) -> SignalProducer<Value, Error> {
+    open func onStarted(_ callback:@escaping () -> ()) -> SignalProducer<Value, Error> {
         return self.on(started: callback)
     }
     
-    func onError(_ callback:@escaping (_ error:Error) -> () ) -> SignalProducer<Value, Error> {
+    open func onError(_ callback:@escaping (_ error:Error) -> () ) -> SignalProducer<Value, Error> {
         return self.on(failed: { (error) -> () in
             callback(error)
         })
     }
     
-    func onNext(_ nextClosure:@escaping (Value) -> ()) -> SignalProducer<Value, Error> {
+    open func onNext(_ nextClosure:@escaping (Value) -> ()) -> SignalProducer<Value, Error> {
         return self.on(value: nextClosure)
     }
     
-    func onCompleted(_ nextClosure:@escaping () -> ()) -> SignalProducer<Value, Error> {
+    open func onCompleted(_ nextClosure:@escaping () -> ()) -> SignalProducer<Value, Error> {
         return self.on(completed: nextClosure)
     }
     
-    func onNextAs<U>(_ nextClosure:@escaping (U) -> ()) -> SignalProducer<U, ALCastError> {
+    open func onNextAs<U>(_ nextClosure:@escaping (U) -> ()) -> SignalProducer<U, ALCastError> {
         return self.mapToType().on(value: nextClosure)
     }
     
     /// This function ignores any parsing errors
-    func startWithNextAs<U>(_ nextClosure:@escaping (U) -> ()) -> Disposable {
+    open func startWithNextAs<U>(_ nextClosure:@escaping (U) -> ()) -> Disposable {
         return mapToType()
             .flatMapError { (object) -> SignalProducer<U, NoError> in
                 return SignalProducer.empty

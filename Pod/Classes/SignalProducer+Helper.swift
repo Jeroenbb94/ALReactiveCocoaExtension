@@ -58,4 +58,27 @@ public extension SignalProducerProtocol {
                 return SignalProducer.empty
             }.startWithValues(nextClosure)
     }
+    
+    public func flatMapErrorToNSError() -> SignalProducer<Value, NSError> {
+        return flatMapError({
+            SignalProducer(error: $0 as NSError)
+        })
+    }
 }
+
+extension SignalProducer {
+    public func ignoreError() -> SignalProducer<Value, NoError> {
+        return flatMapError { _ in
+            SignalProducer<Value, NoError>.empty
+        }
+    }
+}
+
+extension Signal {
+    
+    func toSignalProducer() -> SignalProducer<Value, Error> {
+        return SignalProducer(signal: self)
+    }
+    
+}
+

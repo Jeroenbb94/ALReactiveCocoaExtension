@@ -66,7 +66,7 @@ public extension SignalProducerProtocol {
     }
 }
 
-extension SignalProducer {
+public extension SignalProducer {
     public func ignoreError() -> SignalProducer<Value, NoError> {
         return flatMapError { _ in
             SignalProducer<Value, NoError>.empty
@@ -74,7 +74,7 @@ extension SignalProducer {
     }
 }
 
-extension Signal {
+public extension Signal {
     
     func toSignalProducer() -> SignalProducer<Value, Error> {
         return SignalProducer(signal: self)

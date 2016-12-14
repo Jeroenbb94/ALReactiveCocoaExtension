@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ALReactiveCocoaExtension"
-  s.version          = "4.0.4"
+  s.version          = "4.0.5"
   s.summary          = "Contains replacements for the RAC and RACObserve macros in Swift and adds multiple cast methods."
 
   s.description      = "Contains replacements for the RAC and RACObserve macros in Swift and adds multiple cast methods which you can use to improve your ReactiveCocoa usage. It also adds wrappers around the new SignalProducer."
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Pod/Classes/**/*'
 
-  s.dependency 'Moya', '8.0.0-beta.5'
+  s.dependency 'Moya', '8.0.0-beta.6'
   s.dependency "ReactiveSwift", "1.0.0-alpha.4"
   s.framework  = "Foundation"
 
